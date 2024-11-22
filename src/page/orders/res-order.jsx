@@ -66,7 +66,7 @@ const Restaurant_order = () => {
     if (e.data) {
       setRestData((old) => ({
         ...old,
-        myOrder: [e.data, ...(old.myOrder || [])],
+        myOrder: [e.data, ...(old?.myOrder || [])],
       }));
       setTabActive("my_order");
       setItemQTY([]);
@@ -113,7 +113,7 @@ const Restaurant_order = () => {
               setRestData((old) => ({
                 ...old,
                 myOrder: old.myOrder
-                  ? old.myOrder.map((item) =>
+                  ? old.myOrder?.map((item) =>
                       item.id === data.data.data.id
                         ? { ...item, ...data.data.data }
                         : item
@@ -350,7 +350,7 @@ const Restaurant_order = () => {
                       }}
                     >
                       Đơn của tôi{" "}
-                      {restData?.myOrder.filter((order) =>
+                      {restData?.myOrder?.filter((order) =>
                         [
                           "DELIVERED",
                           "CREATED",
@@ -360,7 +360,7 @@ const Restaurant_order = () => {
                       ).length > 0 && (
                         <div className="count">
                           {
-                            restData?.myOrder.filter((order) =>
+                            restData?.myOrder?.filter((order) =>
                               [
                                 "DELIVERED",
                                 "CREATED",
