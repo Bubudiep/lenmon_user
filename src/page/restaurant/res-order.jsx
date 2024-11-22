@@ -7,6 +7,7 @@ const Restaurant_user_order = ({
   token,
   setTabActive,
 }) => {
+  const enableCancel = false;
   const [currentTab, setCurrentTab] = useState("CREATED"); // Trạng thái tab hiện tại
   const [cancelOrderId, setCancelOrderId] = useState(null);
   const [cancelReason, setCancelReason] = useState("");
@@ -200,7 +201,7 @@ const Restaurant_user_order = ({
       )}
 
       {/* Modal hủy đơn */}
-      {showCancelModal && (
+      {showCancelModal && enableCancel && (
         <div className="modal">
           <div className="modal-content">
             <h3>Hủy đơn hàng</h3>

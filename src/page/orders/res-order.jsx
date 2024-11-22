@@ -274,6 +274,7 @@ const Restaurant_order = () => {
                 setoderSuccess={setoderSuccess}
                 setshowPopup={setshowPopup}
                 setPopUpview={setPopUpview}
+                removeItem={handleRemoveItem}
                 onClose={() => {
                   setShowCart(false);
                 }}

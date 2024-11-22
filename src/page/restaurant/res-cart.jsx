@@ -10,6 +10,7 @@ const Restaurant_cart = ({
   setoderSuccess,
   setshowPopup,
   setPopUpview,
+  removeItem,
 }) => {
   const listRef = useRef();
   const popupRef = useRef();
@@ -135,6 +136,11 @@ const Restaurant_cart = ({
       popupRef.current.canScroll(true);
     }
   };
+  const handleRemove = (e) => {
+    if (confirm("Bỏ ra khỏi giỏ hàng?")) {
+      removeItem(e);
+    }
+  };
   useEffect(() => {
     const currentUrl = window.location.href;
     const params = new URLSearchParams(window.location.search);
@@ -222,7 +228,7 @@ const Restaurant_cart = ({
                   </div>
                 </div>
                 <div className="tools">
-                  <div className="button">
+                  <div className="button" onClick={() => handleRemove(item)}>
                     <i className="fa-solid fa-xmark"></i>
                   </div>
                 </div>
