@@ -8,23 +8,20 @@ const Restaurant_menu = ({
   removeItem,
   token,
   setShowLogin,
+  setItemQTY,
 }) => {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [removeItemId, setRemoveItemId] = useState(null);
-
   const menu = restData.menu.length > 0 ? restData.menu[0] : {};
   const listId = itemQTY.map((item) => item.id);
-
   const handleAdd = (item) => {
     addItem(item);
     setSelectedItemId(null);
   };
-
   const handleRemove = (item) => {
     removeItem(item);
     setRemoveItemId(null);
   };
-
   const isInCart = (id) => listId.includes(id);
 
   return (
@@ -42,18 +39,21 @@ const Restaurant_menu = ({
                       item={item}
                       onClose={() => setRemoveItemId(null)}
                       onRemove={() => handleRemove(item)}
+                      itemQTY={itemQTY}
+                      setItemQTY={setItemQTY}
                     />
                   ) : (
                     <AlreadyInCartBox
                       item={item}
                       onClick={() => setRemoveItemId(item.id)}
+                      itemQTY={itemQTY}
                     />
                   )
                 ) : selectedItemId === item.id ? (
                   <SelectBox
                     item={item}
                     onClose={() => setSelectedItemId(null)}
-                    onAdd={() => handleAdd(item)}
+                    onAdd={handleAdd}
                     onComplete={() => addSave(item)}
                   />
                 ) : null}
@@ -113,29 +113,60 @@ const Restaurant_menu = ({
 
 // Các component phụ
 const SelectBox = ({ item, onClose, onAdd, onComplete }) => {
+  const [quantity, setQuantity] = useState(0); // Initial quantity is 1
   const isOutOfStock = !item.is_available || item.is_delete;
-
+  const handleIncrement = () => {
+    setQuantity((prev) => prev + 1);
+  };
+  const handleDecrement = () => {
+    setQuantity((prev) => (prev > 1 ? prev - 1 : prev)); // Ensure quantity doesn't go below 1
+  };
+  const handleAddToCart = (item, quantity) => {
+    onAdd({ ...item, quantity });
+    setQuantity(quantity);
+  };
   return (
     <div className="selectBox">
-      <div className="bg-Item" onClick={onClose} />
+      <div
+        className="bg-Item"
+        onClick={() => {
+          if (!isOutOfStock && quantity) {
+            handleAddToCart(item, quantity);
+          }
+          return onClose();
+        }}
+      />
       <div className="items">
         {isOutOfStock ? (
-          <>
-            <div className="font-[15px] text-[#fff] text-center">Hết hàng</div>
-            <button className="view">
-              Chi tiết <i className="fa-solid fa-angles-right"></i>
-            </button>
-          </>
+          <div className="font-[15px] text-[#fff] text-center">Hết hàng</div>
         ) : (
           <>
-            <button className="add" onClick={onAdd}>
+            <div className="add-items">
+              <button className="button" onClick={handleDecrement}>
+                -
+              </button>
+              <div className="value">
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => {
+                    const value = parseInt(e.target.value, 10);
+                    setQuantity(value > 0 ? value : 1); // Ensure valid quantity
+                  }}
+                  min="1"
+                />
+              </div>
+              <button className="button" onClick={handleIncrement}>
+                +
+              </button>
+            </div>
+            <button
+              className="add"
+              onClick={() => {
+                handleAddToCart(item, quantity);
+              }}
+            >
               <i className="fa-solid fa-cart-plus"></i> Thêm vào giỏ
-            </button>
-            <button className="complete" onClick={onComplete}>
-              <i className="fa-regular fa-circle-check"></i> Thêm và xong
-            </button>
-            <button className="view">
-              Chi tiết <i className="fa-solid fa-angles-right"></i>
             </button>
           </>
         )}
@@ -144,32 +175,78 @@ const SelectBox = ({ item, onClose, onAdd, onComplete }) => {
   );
 };
 
-const AlreadyInCartBox = ({ item, onClick }) => (
-  <div className="selectBox ready" onClick={onClick}>
-    <div className="bg-Item" />
-    <div className="already">
-      <i className="fa-solid fa-circle-check"></i>
-      Đã có trong giỏ
-    </div>
-  </div>
-);
-
-const RemoveBox = ({ item, onClose, onRemove }) => (
-  <div className="selectBox ready">
-    <div className="bg-Item" onClick={onClose} />
-    <div className="already">
-      <i className="fa-solid fa-circle-check"></i>
-      <div className="items">
-        <button className="add" onClick={onRemove}>
-          <i className="fa-solid fa-cart-plus"></i> Bỏ khỏi giỏ
-        </button>
-        <button className="view">
-          Chi tiết <i className="fa-solid fa-angles-right"></i>
-        </button>
+const AlreadyInCartBox = ({ item, onClick, itemQTY }) => {
+  const thisItem = itemQTY.filter((old) => old.id === item.id);
+  return (
+    <div className="selectBox ready" onClick={onClick}>
+      <div className="bg-Item" />
+      <div className="already">
+        <i className="fa-solid fa-check"></i>
+        <div className="item-qty">Số lượng: {thisItem[0].quantity}</div>
       </div>
     </div>
-  </div>
-);
+  );
+};
+
+const RemoveBox = ({ item, onClose, onRemove, itemQTY, setItemQTY }) => {
+  const thisItem = itemQTY.filter((old) => old.id === item.id);
+  const [quantity, setQuantity] = useState(thisItem[0].quantity ?? 0);
+  const handleIncrement = () => {
+    setQuantity((prev) => prev + 1); // Update local quantity state
+    setItemQTY((old) =>
+      old.map(
+        (i) => (i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i) // Update the item's quantity
+      )
+    );
+  };
+  const handleDecrement = () => {
+    setQuantity((prev) => prev - 1); // Update local quantity state
+    setItemQTY((old) =>
+      old.map(
+        (i) => (i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i) // Update the item's quantity
+      )
+    );
+  };
+  return (
+    <div className="selectBox ready">
+      <div
+        className="bg-Item"
+        onClick={() => {
+          if (quantity <= 0) {
+            return onRemove();
+          }
+          return onClose();
+        }}
+      />
+      <div className="already">
+        <div className="items">
+          <div className="add-items">
+            <button className="button" onClick={handleDecrement}>
+              -
+            </button>
+            <div className="value">
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value, 10);
+                  setQuantity(value > 0 ? value : 1); // Ensure valid quantity
+                }}
+                min="1"
+              />
+            </div>
+            <button className="button" onClick={handleIncrement}>
+              +
+            </button>
+          </div>
+          <button className="add" onClick={onRemove}>
+            <i className="fa-solid fa-cart-arrow-down"></i> Bỏ khỏi giỏ
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const EmptyState = () => (
   <div className="null">

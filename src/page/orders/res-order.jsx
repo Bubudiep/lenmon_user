@@ -92,13 +92,19 @@ const Restaurant_order = () => {
     if (user.app) {
       if (user.app.access_token) {
         fetchRestaurantData(id, user.app.access_token);
-        const newSocket = io("https://ipays.vn", {
-          path: "/socket.io",
+        const newSocket = io("http://" + location.hostname + ":3009", {
           transports: ["websocket"],
           auth: {
             token: token,
           },
         });
+        // const newSocket = io("https://ipays.vn", {
+        //   path: "/socket.io",
+        //   transports: ["websocket"],
+        //   auth: {
+        //     token: token,
+        //   },
+        // });
         newSocket.on("connect", () => {
           console.log("connected!");
           newSocket.on("message", (data) => {
@@ -344,8 +350,26 @@ const Restaurant_order = () => {
                       }}
                     >
                       Đơn của tôi{" "}
-                      {restData?.myOrder.length > 0 && (
-                        <div className="count">{restData.myOrder.length}</div>
+                      {restData?.myOrder.filter((order) =>
+                        [
+                          "DELIVERED",
+                          "CREATED",
+                          "RECEIVED",
+                          "SHIPPING",
+                        ].includes(order.status)
+                      ).length > 0 && (
+                        <div className="count">
+                          {
+                            restData?.myOrder.filter((order) =>
+                              [
+                                "DELIVERED",
+                                "CREATED",
+                                "RECEIVED",
+                                "SHIPPING",
+                              ].includes(order.status)
+                            ).length
+                          }
+                        </div>
                       )}
                     </div>
                   </div>
@@ -369,6 +393,7 @@ const Restaurant_order = () => {
                       token={token}
                       setShowLogin={setShowLogin}
                       itemQTY={itemQTY}
+                      setItemQTY={setItemQTY}
                       restData={restData}
                       addItem={handleAddItem}
                       removeItem={handleRemoveItem}

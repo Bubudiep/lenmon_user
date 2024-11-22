@@ -8,15 +8,21 @@ const Restaurant_user_order = ({
   setTabActive,
 }) => {
   const enableCancel = false;
-  const [currentTab, setCurrentTab] = useState("CREATED"); // Trạng thái tab hiện tại
+  const [currentTab, setCurrentTab] = useState(
+    "CREATED_RECEIVED_SHIPPING_DELIVERED"
+  ); // Trạng thái tab hiện tại
   const [cancelOrderId, setCancelOrderId] = useState(null);
   const [cancelReason, setCancelReason] = useState("");
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelOrderStatus, setCancelOrderStatus] = useState("");
   const statusGroups = {
-    CREATED: ["CREATED"], // Chờ xác nhận
-    RECEIVED_SHIPPING: ["RECEIVED", "SHIPPING"], // Đang giao
-    DELIVERED_COMPLETE: ["DELIVERED", "COMPLETE"], // Hoàn tất
+    CREATED_RECEIVED_SHIPPING_DELIVERED: [
+      "DELIVERED",
+      "CREATED",
+      "RECEIVED",
+      "SHIPPING",
+    ], // Chờ xác nhận
+    COMPLETE: ["COMPLETE"], // Hoàn tất
     CANCEL: ["CANCEL"], // Đã hủy
   };
   const handleCancelOrder = () => {
@@ -85,9 +91,11 @@ const Restaurant_user_order = ({
       {/* Tabs */}
       <div className="tabs">
         {[
-          { label: "Đang chờ", value: "CREATED" },
-          { label: "Đang giao", value: "RECEIVED_SHIPPING" },
-          { label: "Hoàn tất", value: "DELIVERED_COMPLETE" },
+          {
+            label: "Đơn hiện tại",
+            value: "CREATED_RECEIVED_SHIPPING_DELIVERED",
+          },
+          { label: "Hoàn tất", value: "COMPLETE" },
           { label: "Đã hủy", value: "CANCEL" },
         ].map((tab) => (
           <button
@@ -99,34 +107,45 @@ const Restaurant_user_order = ({
           </button>
         ))}
       </div>
-
-      {/* Danh sách đơn hàng */}
       {filteredOrders.length > 0 ? (
         <div className="list-checkout slide-top">
           <div className="checkout-list">
             {filteredOrders.map((order) => (
               <div className={`items ${order.status}`} key={order.id}>
                 <div className="res">
-                  <div className="name title">
-                    {order.status === "CREATED"
-                      ? "Chờ xác nhận"
-                      : order.status === "RECEIVED"
-                      ? "Đang làm"
-                      : order.status === "SHIPPING"
-                      ? "Đang ship"
-                      : order.status === "DELIVERED"
-                      ? "Hoàn thành"
-                      : order.status === "CANCEL"
-                      ? "Đã hủy"
-                      : ""}
+                  <div className={`name title ${order.status}`}>
+                    {order.status === "CREATED" ? (
+                      "Chờ xác nhận"
+                    ) : order.status === "RECEIVED" ? (
+                      <>
+                        <i className="fa-solid fa-hourglass-half"></i> Đang làm
+                      </>
+                    ) : order.status === "SHIPPING" ? (
+                      <>
+                        <i className="fa-solid fa-truck-fast"></i> Đang ship
+                      </>
+                    ) : order.status === "DELIVERED" ? (
+                      <>
+                        <i className="fa-solid fa-money-check-dollar"></i> Chưa
+                        thanh toán
+                      </>
+                    ) : order.status === "CANCEL" ? (
+                      <>
+                        <i className="fa-solid fa-xmark"></i> Đã hủy
+                      </>
+                    ) : order.status === "COMPLETE" ? (
+                      <>
+                        <i className="fa-solid fa-check"></i> Hoàn tất
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="key">
                     #HD-{order.OrderKey.slice(0, 7)}...
                     {order.OrderKey.slice(-4)}
                   </div>
-                  {["CREATED", "RECEIVED", "SHIPPING"].includes(
-                    order.status
-                  ) && (
+                  {["CREATED"].includes(order.status) && (
                     <button
                       className="btn btn-cancel"
                       onClick={() =>

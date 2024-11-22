@@ -1564,6 +1564,34 @@ button {
               }
             }
           }
+          &.RECEIVED {
+            .res {
+              .title {
+                color: #008fe2;
+              }
+            }
+          }
+          &.SHIPPING {
+            .res {
+              .title {
+                color: #00c281;
+              }
+            }
+          }
+          &.COMPLETE {
+            .res {
+              .title {
+                color: #00c200;
+              }
+            }
+          }
+          &.DELIVERED {
+            .res {
+              .title {
+                color: #0502b1;
+              }
+            }
+          }
           &.CANCEL {
             .res {
               .title {
@@ -1827,6 +1855,34 @@ button {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
+                z-index: 2;
+                .add-items {
+                  display: flex;
+                  gap: 3px;
+                  animation: slideIn_mini 0.35s forwards;
+                  .button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 20px;
+                    color: #fff;
+                    width: 34px;
+                    background-color: orangered;
+                    border-radius: 6px;
+                    height: unset;
+                  }
+                  .value {
+                    input {
+                      height: 25px;
+                      border-radius: 5px;
+                      outline: none;
+                      width: 40px;
+                      text-align: center;
+                      border: 1px solid #e05200;
+                      background-color: rgb(255, 255, 255);
+                    }
+                  }
+                }
                 button {
                   z-index: 1;
                   height: 35px;
@@ -1849,7 +1905,7 @@ button {
                   }
                   &.view {
                     color: #ffffff;
-                    background-color: #003666;
+                    background-color: #0e65e7;
                     animation: slideIn_mini 0.5s forwards;
                   }
                 }
@@ -1873,12 +1929,18 @@ button {
                 align-items: center;
                 color: #fff;
                 transition: all 0.3s;
-                text-shadow: 1px 2px #0005, -1px 2px #0005, 1px -2px #0005;
+                .item-qty {
+                  padding: 3px 8px;
+                  background-color: #0084ff;
+                  font-size: 13px;
+                  border-radius: 6px;
+                  margin-top: 5px;
+                }
                 button {
                   z-index: 1;
                 }
                 i {
-                  color: #34b763;
+                  color: #fff;
                   font-size: 30px;
                 }
                 .items {

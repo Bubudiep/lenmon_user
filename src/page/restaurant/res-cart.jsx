@@ -16,12 +16,14 @@ const Restaurant_cart = ({
   const popupRef = useRef();
   const [option, setOption] = useState(1);
   const [notes, setNotes] = useState("");
+  const [firstTime, setfirstTime] = useState(true);
   const [spaceDiss, setspaceDiss] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   // State to manage item quantities
+  console.log(itemQTY);
   const [quantities, setQuantities] = useState(
     itemQTY.reduce((acc, item) => {
-      acc[item.id] = 1; // Initialize each item with a quantity of 1
+      acc[item.id] = item.quantity; // Initialize each item with a quantity of 1
       return acc;
     }, {})
   );
@@ -32,12 +34,12 @@ const Restaurant_cart = ({
   );
   const allGroups = restData.layouts.flatMap((layout) => layout.groups);
   const [selectedGroupId, setSelectedGroupId] = useState(
-    allGroups.length > 0 ? allGroups[0].id : null
+    restData?.mySpace?.group ?? allGroups.length > 0 ? allGroups[0].id : null
   );
   const selectedGroup = allGroups.find((group) => group.id === selectedGroupId);
   const spaces = selectedGroup ? selectedGroup.spaces : [];
   const [selectedSpaceId, setSelectedSpaceId] = useState(
-    spaces.length > 0 ? spaces[0].id : null
+    restData?.mySpace?.space ?? spaces.length > 0 ? spaces[0].id : null
   );
   // Xử lý khi chọn group
   const handleGroupChange = (e) => {
@@ -146,6 +148,11 @@ const Restaurant_cart = ({
     const params = new URLSearchParams(window.location.search);
     const table = params.get("table");
     const thisSpace = allSpaces.filter((space) => space.id == table);
+    if (selectedGroupId && selectedSpaceId && firstTime) {
+      setOption(2);
+      setspaceDiss(true);
+      setfirstTime(false);
+    }
     if (thisSpace.length > 0) {
       setOption(2);
       setSelectedSpaceId(thisSpace[0].id);
@@ -266,7 +273,6 @@ const Restaurant_cart = ({
                 <div className="order-option">
                   <select
                     value={option}
-                    disabled={spaceDiss}
                     onChange={(e) => {
                       setOption(e.target.value);
                     }}
