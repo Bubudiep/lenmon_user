@@ -92,19 +92,19 @@ const Restaurant_order = () => {
     if (user.app) {
       if (user.app.access_token) {
         fetchRestaurantData(id, user.app.access_token);
-        const newSocket = io("http://" + location.hostname + ":3009", {
-          transports: ["websocket"],
-          auth: {
-            token: token,
-          },
-        });
-        // const newSocket = io("https://ipays.vn", {
-        //   path: "/socket.io",
+        // const newSocket = io("http://" + location.hostname + ":3009", {
         //   transports: ["websocket"],
         //   auth: {
         //     token: token,
         //   },
         // });
+        const newSocket = io("https://ipays.vn", {
+          path: "/socket.io",
+          transports: ["websocket"],
+          auth: {
+            token: token,
+          },
+        });
         newSocket.on("connect", () => {
           console.log("connected!");
           newSocket.on("message", (data) => {
