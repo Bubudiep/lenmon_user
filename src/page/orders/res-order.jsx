@@ -260,7 +260,7 @@ const Restaurant_order = () => {
               itemQTY={itemQTY}
               showCart={() => {
                 if (token) {
-                  setShowCart;
+                  setShowCart(true);
                 } else {
                   setShowLogin(true);
                 }
