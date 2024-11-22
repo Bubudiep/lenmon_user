@@ -166,6 +166,10 @@ const BottomPopup = forwardRef(
       <div className="bg-full" style={{ zIndex: zIndex }}>
         <div
           className={`detectOut ${isVisible ? "fade-out" : "fade-in"}`}
+          onClick={handleClose}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         ></div>
         <div
           ref={boxRef}

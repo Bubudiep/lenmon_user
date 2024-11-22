@@ -89,7 +89,6 @@ const Restaurant_order = () => {
     }
   };
   useEffect(() => {
-    console.log(user);
     if (user.app) {
       if (user.app.access_token) {
         fetchRestaurantData(id, user.app.access_token);
@@ -231,10 +230,11 @@ const Restaurant_order = () => {
           })
           .finally(() => {});
       } else {
+        fetchRestaurantData(id, false);
         setShowLogin(true);
       }
     }
-  }, [user]);
+  }, [user, token]);
   return (
     <>
       {loading && (
@@ -246,13 +246,26 @@ const Restaurant_order = () => {
         </div>
       )}
       {showLogin && (
-        <Login_popup onClose={() => setShowLogin(false)} setUser={setUser} />
+        <Login_popup
+          onClose={() => setShowLogin(false)}
+          setUser={setUser}
+          settoken={settoken}
+        />
       )}
       {isShow && (
         <>
           <div className="restaurant-landing">
             {showPopup && popUpview}
-            <Restaurant_pupup itemQTY={itemQTY} showCart={setShowCart} />
+            <Restaurant_pupup
+              itemQTY={itemQTY}
+              showCart={() => {
+                if (token) {
+                  setShowCart;
+                } else {
+                  setShowLogin(true);
+                }
+              }}
+            />
             {showCart && (
               <Restaurant_cart
                 itemQTY={itemQTY}
@@ -321,7 +334,13 @@ const Restaurant_order = () => {
                       className={`button ${
                         tabActive === "my_order" ? "active" : ""
                       }`}
-                      onClick={() => setTabActive("my_order")}
+                      onClick={() => {
+                        if (token) {
+                          setTabActive("my_order");
+                        } else {
+                          setShowLogin(true);
+                        }
+                      }}
                     >
                       Đơn của tôi{" "}
                       {restData?.myOrder.length > 0 && (
@@ -346,6 +365,8 @@ const Restaurant_order = () => {
                 <div className="rest-details">
                   {tabActive === "menus" && restData.menu && (
                     <Restaurant_menu
+                      token={token}
+                      setShowLogin={setShowLogin}
                       itemQTY={itemQTY}
                       restData={restData}
                       addItem={handleAddItem}

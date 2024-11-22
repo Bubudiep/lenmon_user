@@ -6,6 +6,8 @@ const Restaurant_menu = ({
   addSave,
   itemQTY,
   removeItem,
+  token,
+  setShowLogin,
 }) => {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [removeItemId, setRemoveItemId] = useState(null);
@@ -60,8 +62,12 @@ const Restaurant_menu = ({
                 <div
                   className="image"
                   onClick={() => {
-                    setSelectedItemId(item.id);
-                    setRemoveItemId(null);
+                    if (token) {
+                      setSelectedItemId(item.id);
+                      setRemoveItemId(null);
+                    } else {
+                      setShowLogin(true);
+                    }
                   }}
                 >
                   <img src={item?.image64_mini ?? "#"} alt={item?.name} />
@@ -69,8 +75,12 @@ const Restaurant_menu = ({
                 <div
                   className="info"
                   onClick={() => {
-                    setSelectedItemId(item.id);
-                    setRemoveItemId(null);
+                    if (token) {
+                      setSelectedItemId(item.id);
+                      setRemoveItemId(null);
+                    } else {
+                      setShowLogin(true);
+                    }
                   }}
                 >
                   <div className="item-top">

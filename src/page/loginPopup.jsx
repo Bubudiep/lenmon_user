@@ -3,7 +3,7 @@ import BottomPopup from "./bottomPopup";
 import api from "../components/api";
 import Cookies from "js-cookie";
 
-const Login_popup = ({ onClose, setUser }) => {
+const Login_popup = ({ onClose, setUser, settoken }) => {
   const popupRef = useRef(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormdata] = useState({
@@ -26,6 +26,7 @@ const Login_popup = ({ onClose, setUser }) => {
       })
       .then((res) => {
         const { access_token, refresh_token, expires_in, token_type } = res;
+        settoken(access_token);
         Cookies.set("lenmon_user", formData.name);
         Cookies.set("lenmon_phone", formData.phone);
         Cookies.set("accessToken", access_token, {
@@ -45,18 +46,7 @@ const Login_popup = ({ onClose, setUser }) => {
   };
   return (
     <BottomPopup ref={popupRef} title="ĐĂNG NHẬP" onClose={onClose}>
-      <div
-        className="login-box"
-        onTouchStart={() => {
-          popupRef.current.canScroll(false);
-        }}
-        onTouchMove={() => {
-          popupRef.current.canScroll(false);
-        }}
-        onTouchEnd={() => {
-          popupRef.current.canScroll(false);
-        }}
-      >
+      <div className="login-box">
         <div className="login-message">
           Để nâng cao trải nghiệm và bảo mật người dùng, chúng tôi cần một vài
           thông tin.
