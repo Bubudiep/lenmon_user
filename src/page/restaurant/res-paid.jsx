@@ -18,7 +18,7 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
     test.setAdditionalDataFieldTemplate(
       `TT ${api.removeSpecial(restData.name)?.replaceAll(" ", "")}_${
         api.removeSpecial(order.space_name)?.replaceAll(" ", "") ?? "Mangve"
-      }`
+      }_${order.OrderKey.slice(0, 8)}`
     );
     const string = test.build();
     console.log(string);
@@ -66,7 +66,10 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
         onClose();
       }}
     >
-      {restData.bankCode && restData.bankValue && totalPrice ? (
+      {restData?.bankCode &&
+      restData?.bankValue &&
+      bankInfo?.logo &&
+      totalPrice ? (
         <>
           <div className="qrcode">
             <div className="bank-logo">
