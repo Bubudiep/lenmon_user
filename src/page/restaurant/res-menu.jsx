@@ -113,7 +113,7 @@ const Restaurant_menu = ({
 
 // Các component phụ
 const SelectBox = ({ item, onClose, onAdd, onComplete }) => {
-  const [quantity, setQuantity] = useState(0); // Initial quantity is 1
+  const [quantity, setQuantity] = useState(1); // Initial quantity is 1
   const isOutOfStock = !item.is_available || item.is_delete;
   const handleIncrement = () => {
     setQuantity((prev) => prev + 1);

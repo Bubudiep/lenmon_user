@@ -20,7 +20,7 @@ button {
 }
 .home-page {
   width: 100%;
-  background-color: #fff;
+  background-color: #2678f3e0;
   .top-container {
     .app-container {
       display: flex;
@@ -1648,6 +1648,8 @@ button {
             display: flex;
             font-size: 12px;
             font-weight: 500;
+            align-items: center;
+            margin-bottom: 6px;
             &.notes {
               gap: 5px;
               padding: 2px 0px;
@@ -1690,11 +1692,44 @@ button {
             }
             button.btn-cancel {
               background-color: #dd2828;
-              width: 20px;
+              width: 25px;
               display: flex;
               align-items: center;
               justify-content: center;
-              height: 20px;
+              height: 25px;
+              border-radius: 5px;
+              color: #fff;
+              margin-left: 6px;
+              font-size: 10px;
+            }
+            button.btn-paid {
+              background-color: #dd2828;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 25px;
+              border-radius: 5px;
+              color: #fff;
+              margin-left: 6px;
+              font-size: 10px;
+            }
+            button.btn-paided {
+              background-color: #28a4dd;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 25px;
+              border-radius: 5px;
+              color: #fff;
+              margin-left: 6px;
+              font-size: 10px;
+            }
+            button.btn-paideds {
+              background-color: #00c451;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 25px;
               border-radius: 5px;
               color: #fff;
               margin-left: 6px;
@@ -2336,6 +2371,216 @@ button {
 }
 
 .content-box {
+  .bottom {
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+    width: 100%;
+    height: 60px;
+    background-color: #0084ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 500;
+  }
+  .qrcode {
+    background-color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 60px;
+    .list-items {
+      padding: 4px;
+      color: #00315c;
+      width: 100%;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      .header {
+        font-size: 14px;
+        text-align: center;
+        margin: 12px 0px 4px 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #aaaaaa;
+        gap: 10px;
+        &::before {
+          display: flex;
+          flex: 1;
+          content: "";
+          border-bottom: 1px solid #e0e0e0;
+        }
+        &::after {
+          display: flex;
+          flex: 1;
+          content: "";
+          border-bottom: 1px solid #e0e0e0;
+        }
+      }
+      table {
+        background-color: #c7e3ff;
+        width: 100%;
+        border-collapse: collapse;
+        tr {
+          position: relative;
+          align-items: center;
+          &::before {
+            top: 8px;
+            left: -8px;
+            content: "";
+            width: 12px;
+            height: 12px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: absolute;
+          }
+          &::after {
+            top: 8px;
+            right: -8px;
+            content: "";
+            width: 12px;
+            height: 12px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: absolute;
+          }
+          &.cancel {
+            color: #999;
+            background-color: #fff;
+            td {
+              &:last-child {
+                color: #999 !important;
+              }
+            }
+            &::before {
+              content: "";
+              height: 0px;
+              top: 15px;
+              border-bottom: 1px solid #fc4902;
+              position: absolute;
+              left: 0;
+              width: 100%;
+            }
+          }
+          td {
+            border: hidden;
+            padding: 4px 0px;
+            &:first-child {
+              padding-left: 10px;
+              &::before {
+                content: "•";
+                margin-right: 5px;
+                color: #ffffff;
+              }
+            }
+            &:last-child {
+              text-align: right;
+              padding-right: 10px;
+              color: rgb(0, 0, 0);
+              font-weight: 500;
+            }
+          }
+          &:not(:last-child) {
+            td {
+              border-bottom: 1px solid #dbdbdb;
+            }
+          }
+        }
+      }
+    }
+    .bank-info {
+      margin-top: 5px;
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      .qr-code {
+        padding: 20px 0px;
+        display: flex;
+        justify-content: center;
+      }
+      table {
+        width: 80%;
+        border-spacing: 0px;
+        font-size: 14px;
+        tr {
+          &:first-child {
+            td {
+              &:first-child {
+                border-top-left-radius: 8px;
+              }
+              &:last-child {
+                border-top-right-radius: 8px;
+              }
+            }
+          }
+          &:last-child {
+            td {
+              &:first-child {
+                border-bottom-left-radius: 8px;
+              }
+              &:last-child {
+                border-bottom-right-radius: 8px;
+              }
+            }
+          }
+          &:not(:first-child) {
+            td {
+              border-top: hidden;
+            }
+          }
+          td {
+            padding: 5px;
+            border: 1px solid #dfe1ee;
+            &:not(:first-child) {
+              border-left: hidden;
+            }
+            &:last-child {
+              text-align: right;
+              color: #0f76d6;
+              &.price {
+                color: orangered;
+              }
+            }
+            &:first-child {
+              font-size: 13px;
+              font-weight: 500;
+              color: #003666;
+            }
+          }
+        }
+      }
+    }
+    .bank-logo {
+      .box {
+        width: 150px;
+        max-height: 100px;
+        overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .bank-name {
+      font-size: 13px;
+      margin-top: -10px;
+      margin-bottom: 5px;
+      color: #9ba1af;
+      text-align: center;
+    }
+    .bank-hint {
+      font-size: 13px;
+      margin-bottom: 5px;
+      line-height: 1.2;
+      padding: 0px 20px;
+      color: #9ba1af;
+      text-align: center;
+    }
+  }
   .success {
     animation: slideIn1 0.8s forwards;
     display: flex;

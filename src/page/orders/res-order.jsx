@@ -9,6 +9,7 @@ import Restaurant_cart from "../restaurant/res-cart";
 import Restaurant_pupup from "../restaurant/res-popup";
 import Restaurant_menu from "../restaurant/res-menu";
 import Restaurant_user_order from "../restaurant/res-order";
+import Restaurant_paid from "../restaurant/res-paid";
 
 const Restaurant_order = () => {
   const { id } = useParams();
@@ -22,6 +23,7 @@ const Restaurant_order = () => {
   const [showCart, setShowCart] = useState(false);
   const [itemQTY, setItemQTY] = useState([]);
   const [showPopup, setshowPopup] = useState(false);
+  const [thanhtoan, setThanhtoan] = useState(false);
   const [popUpview, setPopUpview] = useState(
     <div className="bg-full center">
       <div className="detectOut"></div>
@@ -272,6 +274,17 @@ const Restaurant_order = () => {
                 }
               }}
             />
+            {thanhtoan && (
+              <Restaurant_paid
+                token={token}
+                restData={restData}
+                setRestData={setRestData}
+                order={thanhtoan}
+                onClose={() => {
+                  setThanhtoan(false);
+                }}
+              />
+            )}
             {showCart && (
               <Restaurant_cart
                 itemQTY={itemQTY}
@@ -405,6 +418,7 @@ const Restaurant_order = () => {
                   )}
                   {tabActive === "my_order" && restData.myOrder && (
                     <Restaurant_user_order
+                      setThanhtoan={setThanhtoan}
                       restData={restData}
                       token={token}
                       setTabActive={setTabActive}

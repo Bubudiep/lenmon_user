@@ -148,15 +148,18 @@ const Restaurant_cart = ({
     const params = new URLSearchParams(window.location.search);
     const table = params.get("table");
     const thisSpace = allSpaces.filter((space) => space.id == table);
-    if (selectedGroupId && selectedSpaceId && firstTime) {
+    if (restData?.mySpace?.group) {
       setOption(2);
       setspaceDiss(true);
       setfirstTime(false);
     }
-    if (thisSpace.length > 0) {
+    console.log(table, thisSpace);
+    if (thisSpace.length > 0 && firstTime) {
       setOption(2);
+      setSelectedGroupId(thisSpace[0].group);
       setSelectedSpaceId(thisSpace[0].id);
       setspaceDiss(true);
+      setfirstTime(false);
     }
   });
   return (

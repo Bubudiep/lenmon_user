@@ -6,6 +6,7 @@ const Restaurant_user_order = ({
   setRestData,
   token,
   setTabActive,
+  setThanhtoan,
 }) => {
   const enableCancel = false;
   const [currentTab, setCurrentTab] = useState(
@@ -155,26 +156,53 @@ const Restaurant_user_order = ({
                       <i className="fa-solid fa-trash-can"></i>
                     </button>
                   )}
+                  {!["COMPLETE", "CANCEL"].includes(order.status) && (
+                    <>
+                      {order.is_paided ? (
+                        <button className="btn btn-paideds">
+                          Đã thanh toán
+                        </button>
+                      ) : order.is_paid ? (
+                        <button className="btn btn-paided">Chờ kiểm tra</button>
+                      ) : (
+                        <button
+                          className="btn btn-paid"
+                          onClick={() => setThanhtoan(order)}
+                        >
+                          Thanh toán
+                        </button>
+                      )}
+                    </>
+                  )}
                 </div>
-                <div className="list-items">
-                  <table>
-                    <tbody>
-                      {order.items.map((item, idx) => (
-                        <tr key={idx}>
-                          <td>{item.name}</td>
-                          <td>SL: {item.quantity}</td>
-                          <td>{item.price.toLocaleString("vi-VN")}đ/1</td>
-                          <td>
-                            {(item.quantity * item.price).toLocaleString(
-                              "vi-VN"
-                            )}
-                            đ
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                {order.status != "CANCEL" && (
+                  <div className="list-items">
+                    <table>
+                      <tbody>
+                        {order.items.map((item, idx) => (
+                          <tr key={idx}>
+                            <td>
+                              {item.status == "CANCEL" ? (
+                                <i className="fa-solid fa-xmark"></i>
+                              ) : (
+                                <i className="fa-regular fa-circle-check"></i>
+                              )}
+                            </td>
+                            <td>{item.name}</td>
+                            <td>SL: {item.quantity}</td>
+                            <td>{item.price.toLocaleString("vi-VN")}đ/1</td>
+                            <td>
+                              {(item.quantity * item.price).toLocaleString(
+                                "vi-VN"
+                              )}
+                              đ
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
                 {order?.custom_notes && (
                   <div className="res notes">
                     <i className="fa-regular fa-note-sticky"></i>
@@ -186,6 +214,7 @@ const Restaurant_user_order = ({
                     Tổng:{" "}
                     <div className="price">
                       {order.items
+                        .filter((it) => it.status !== "CANCEL")
                         .reduce(
                           (sum, item) => sum + item.price * item.quantity,
                           0
