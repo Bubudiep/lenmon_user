@@ -25,12 +25,17 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
     return string;
   };
   useEffect(() => {
-    api.get("https://api.vietqr.io/v2/banks").then((res) => {
-      const match = res.data.filter((bank) => bank.bin == restData.bankCode);
-      if (match.length == 1) {
-        setBankinfo(match[0]);
-      }
-    });
+    api
+      .get("https://api.vietqr.io/v2/banks")
+      .then((res) => {
+        const match = res.data.filter((bank) => bank.bin == restData.bankCode);
+        if (match.length == 1) {
+          setBankinfo(match[0]);
+        }
+      })
+      .catch((err) => {
+        alert("Không lấy được dữ liệu ngân hàng!");
+      });
   }, []);
   const handleThanhtoan = () => {
     console.log(order);
@@ -52,6 +57,7 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
       })
       .catch((err) => {
         console.log(err);
+        alert("Mất kết nối máy chủ. Vui lòng thử lại sau!");
       })
       .finally(() => {
         setisPaid(true);
