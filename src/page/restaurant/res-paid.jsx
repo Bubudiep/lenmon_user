@@ -16,9 +16,9 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
     test.setTransactionAmount(money);
     test.setBeneficiaryOrganization(bankcode, banknumber);
     test.setAdditionalDataFieldTemplate(
-      `TT ${api.removeSpecial(restData.name).replaceAll(" ", "")}_${api
-        .removeSpecial(order.space_name)
-        .replaceAll(" ", "")}`
+      `TT ${api.removeSpecial(restData.name)?.replaceAll(" ", "")}_${
+        api.removeSpecial(order.space_name)?.replaceAll(" ", "") ?? "Mangve"
+      }`
     );
     const string = test.build();
     console.log(string);

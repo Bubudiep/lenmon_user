@@ -2303,6 +2303,11 @@ button {
           box-shadow: 1px 2px 3px #0003;
           border-radius: 12px;
           overflow: hidden;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
         }
       }
     }
@@ -2366,6 +2371,8 @@ button {
     animation: fadeInOut 3s linear infinite;
     img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 }

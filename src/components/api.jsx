@@ -344,13 +344,18 @@ const sendNotice = (title, options) => {
 };
 function removeSpecial(str) {
   // Xóa dấu tiếng Việt
-  const nonAccentStr = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  console.log(str);
+  if (str) {
+    const nonAccentStr = str?.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-  // Xóa ký tự đặc biệt và thay thế bằng dấu cách
-  const cleanedStr = nonAccentStr.replace(/[^a-zA-Z0-9\s]/g, "");
+    // Xóa ký tự đặc biệt và thay thế bằng dấu cách
+    const cleanedStr = nonAccentStr?.replace(/[^a-zA-Z0-9\s]/g, "");
 
-  // Thay thế nhiều khoảng trắng thành 1 khoảng trắng và trim
-  return cleanedStr.replace(/\s+/g, " ").trim();
+    // Thay thế nhiều khoảng trắng thành 1 khoảng trắng và trim
+    return cleanedStr.replace(/\s+/g, " ").trim();
+  } else {
+    return null;
+  }
 }
 // Xuất các phương thức
 export default {
