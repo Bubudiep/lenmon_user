@@ -16,12 +16,11 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
     test.setTransactionAmount(money);
     test.setBeneficiaryOrganization(bankcode, banknumber);
     test.setAdditionalDataFieldTemplate(
-      `TT ${api.removeSpecial(restData.name)?.replaceAll(" ", "")}_${
-        api.removeSpecial(order.space_name)?.replaceAll(" ", "") ?? "Mangve"
-      }_${order.OrderKey.slice(0, 8)}`
+      `TT ${api.removeSpecial(restData.name)?.replaceAll(" ", "")} ${api
+        .removeSpecial(order.space_name ?? "MangVe")
+        ?.replaceAll(" ", "")} ${order.OrderKey.slice(0, 8)}`
     );
     const string = test.build();
-    console.log(string);
     return string;
   };
   useEffect(() => {
