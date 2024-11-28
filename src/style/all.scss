@@ -1629,6 +1629,7 @@ button {
                   position: absolute;
                 }
                 td {
+                  padding: 2px;
                   &:first-child {
                     padding-left: 5px;
                     &::before {
@@ -1640,6 +1641,12 @@ button {
                   &:last-child {
                     text-align: right;
                   }
+                }
+                &.ok {
+                  color: green;
+                }
+                &.wait {
+                  color: rgb(83, 47, 0);
                 }
               }
             }
@@ -2456,6 +2463,23 @@ button {
             background-color: #fff;
             border-radius: 50%;
             position: absolute;
+          }
+          &.done {
+            color: #00cc44;
+            background-color: #efffea;
+            td {
+              &:last-child {
+                color: #085a00 !important;
+              }
+            }
+            &::before {
+              content: "";
+              height: 0px;
+              top: 15px;
+              position: absolute;
+              left: 0;
+              width: 100%;
+            }
           }
           &.cancel {
             color: #999;

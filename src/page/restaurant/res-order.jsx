@@ -180,12 +180,23 @@ const Restaurant_user_order = ({
                     <table>
                       <tbody>
                         {order.items.map((item, idx) => (
-                          <tr key={idx}>
+                          <tr
+                            key={idx}
+                            className={`${
+                              item.status == "DONE"
+                                ? "ok"
+                                : item.status == "WAIT"
+                                ? "wait"
+                                : "cancel"
+                            }`}
+                          >
                             <td>
-                              {item.status == "CANCEL" ? (
-                                <i className="fa-solid fa-xmark"></i>
-                              ) : (
+                              {item.status == "DONE" ? (
                                 <i className="fa-regular fa-circle-check"></i>
+                              ) : item.status == "WAIT" ? (
+                                <i className="fa-solid fa-hourglass-half"></i>
+                              ) : (
+                                <i className="fa-solid fa-xmark"></i>
                               )}
                             </td>
                             <td>{item.name}</td>

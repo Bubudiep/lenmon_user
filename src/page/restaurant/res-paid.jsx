@@ -9,6 +9,7 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
   const [loading, setLoading] = useState(false);
   const [bankInfo, setBankinfo] = useState(false);
   const totalPrice = order.items
+    .filter((item) => !item.is_paid)
     .filter((item) => item.status !== "CANCEL")
     .reduce((sum, item) => sum + item.quantity * item.price, 0);
   const toString = (bankcode, banknumber, money) => {
@@ -157,7 +158,13 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
                     .map((item, idx) => (
                       <tr
                         key={idx}
-                        className={item.status === "CANCEL" ? "cancel" : ""}
+                        className={
+                          item.is_paid
+                            ? "done"
+                            : item.status === "CANCEL"
+                            ? "cancel"
+                            : ""
+                        }
                       >
                         <td>{item.name}</td>
                         <td>SL: {item.quantity}</td>

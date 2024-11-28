@@ -66,10 +66,24 @@ const Restaurant_order = () => {
   };
   const setoderSuccess = (e) => {
     if (e.data) {
-      setRestData((old) => ({
-        ...old,
-        myOrder: [e.data, ...(old?.myOrder || [])],
-      }));
+      setRestData((old) => {
+        const myOrder = old?.myOrder || [];
+        const existingIndex = myOrder.findIndex(
+          (item) => item.id === e.data.id
+        );
+        if (existingIndex !== -1) {
+          myOrder[existingIndex] = e.data;
+          return {
+            ...old,
+            myOrder: [...myOrder], // Tạo mảng mới để React nhận biết thay đổi
+          };
+        } else {
+          return {
+            ...old,
+            myOrder: [e.data, ...myOrder],
+          };
+        }
+      });
       setTabActive("my_order");
       setItemQTY([]);
     }

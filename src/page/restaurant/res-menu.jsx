@@ -200,10 +200,13 @@ const RemoveBox = ({ item, onClose, onRemove, itemQTY, setItemQTY }) => {
     );
   };
   const handleDecrement = () => {
-    setQuantity((prev) => prev - 1); // Update local quantity state
+    setQuantity((prev) => (prev > 1 ? prev - 1 : prev)); // Ensure quantity doesn't go below 1
     setItemQTY((old) =>
       old.map(
-        (i) => (i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i) // Update the item's quantity
+        (i) =>
+          i.id === item.id
+            ? { ...i, quantity: i.quantity > 1 ? i.quantity - 1 : i.quantity }
+            : i // Update the item's quantity
       )
     );
   };
