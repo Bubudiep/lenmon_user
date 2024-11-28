@@ -47,7 +47,30 @@ const Restaurant_user_order = ({
       setCancelReason("");
     });
   };
-
+  const handleAccept = (item_id, can) => {
+    api
+      .post(
+        `/joinres-order/`,
+        {
+          items: item_id,
+          can: can,
+        },
+        token
+      )
+      .then((response) => {
+        setRestData((old) => ({
+          ...old,
+          myOrder: old.myOrder.map((order) =>
+            order.id === response.data.id ? response.data : order
+          ),
+        }));
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {});
+    console.log(item_id, can);
+  };
   const handleOpenCancelModal = (orderId, status) => {
     if (status === "CREATED") {
       if (window.confirm("Bạn có chắc muốn hủy đơn hàng này không?")) {
@@ -203,10 +226,42 @@ const Restaurant_user_order = ({
                             <td>SL: {item.quantity}</td>
                             <td>{item.price.toLocaleString("vi-VN")}đ/1</td>
                             <td>
-                              {(item.quantity * item.price).toLocaleString(
-                                "vi-VN"
+                              {item.user_order != null ? (
+                                !item.is_accept && !item.is_rejected ? (
+                                  <>
+                                    <button
+                                      onClick={() =>
+                                        handleAccept(item.id, true)
+                                      }
+                                    >
+                                      <i class="fa-solid fa-circle-check"></i>
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        handleAccept(item.id, false)
+                                      }
+                                    >
+                                      <i class="fa-solid fa-circle-xmark"></i>
+                                    </button>
+                                  </>
+                                ) : item.is_rejected ? (
+                                  "-"
+                                ) : (
+                                  <>
+                                    {(
+                                      item.quantity * item.price
+                                    ).toLocaleString("vi-VN")}
+                                    đ
+                                  </>
+                                )
+                              ) : (
+                                <>
+                                  {(item.quantity * item.price).toLocaleString(
+                                    "vi-VN"
+                                  )}
+                                  đ
+                                </>
                               )}
-                              đ
                             </td>
                           </tr>
                         ))}
@@ -225,7 +280,12 @@ const Restaurant_user_order = ({
                     Tổng:{" "}
                     <div className="price">
                       {order.items
-                        .filter((it) => it.status !== "CANCEL")
+                        .filter(
+                          (it) =>
+                            it.status !== "CANCEL" &&
+                            (it.user_order == null ||
+                              (it.user_order != null && it.is_accept == true))
+                        )
                         .reduce(
                           (sum, item) => sum + item.price * item.quantity,
                           0

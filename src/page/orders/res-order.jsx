@@ -220,6 +220,34 @@ const Restaurant_order = () => {
                   </div>
                 );
               }
+              if (data.data.action == "join") {
+                setshowPopup(true);
+                setPopUpview(
+                  <div className="bg-full center">
+                    <div
+                      className="detectOut"
+                      onClick={() => {
+                        setshowPopup(false);
+                      }}
+                    ></div>
+                    <div className="whiteBox">
+                      <div className="icon">
+                        <i className="fa-solid fa-circle-check"></i>
+                      </div>
+                      <div className="message">Có người thêm hàng vào giỏ!</div>
+                      <div
+                        className="button"
+                        onClick={() => {
+                          setTabActive("my_order");
+                          setshowPopup(false);
+                        }}
+                      >
+                        Danh sách đơn hàng
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
             }
           });
           newSocket.on("private_event", (data) => {
@@ -305,6 +333,9 @@ const Restaurant_order = () => {
                 setshowPopup={setshowPopup}
                 setPopUpview={setPopUpview}
                 removeItem={handleRemoveItem}
+                user={user}
+                setUser={setUser}
+                settoken={settoken}
                 onClose={() => {
                   setShowCart(false);
                 }}

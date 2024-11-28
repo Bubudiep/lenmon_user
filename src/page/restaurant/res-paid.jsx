@@ -10,7 +10,12 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
   const [bankInfo, setBankinfo] = useState(false);
   const totalPrice = order.items
     .filter((item) => !item.is_paid)
-    .filter((item) => item.status !== "CANCEL")
+    .filter(
+      (it) =>
+        it.status !== "CANCEL" &&
+        (it.user_order == null ||
+          (it.user_order != null && it.is_accept == true))
+    )
     .reduce((sum, item) => sum + item.quantity * item.price, 0);
   const toString = (bankcode, banknumber, money) => {
     const test = new api.VietQR();
@@ -161,7 +166,9 @@ const Restaurant_paid = ({ order, restData, token, onClose, setRestData }) => {
                         className={
                           item.is_paid
                             ? "done"
-                            : item.status === "CANCEL"
+                            : item.status === "CANCEL" ||
+                              (item.user_order != null &&
+                                item.is_rejected == true)
                             ? "cancel"
                             : ""
                         }

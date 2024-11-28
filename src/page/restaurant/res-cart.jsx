@@ -7,6 +7,7 @@ const Restaurant_cart = ({
   itemQTY,
   restData,
   token,
+  user,
   setoderSuccess,
   setshowPopup,
   setPopUpview,
@@ -80,30 +81,58 @@ const Restaurant_cart = ({
         spaceId: selectedSpaceId,
       }),
     };
-    console.log("Đặt hàng:", orderData);
-    api
-      .post(
-        `/oder-fast/`,
-        {
-          takeaway: option == 1,
-          coupon: null,
-          notes: notes,
-          items: orderDetails,
-          restaurant: restData.id,
-          option, // 1: Mang về, 2: Chọn bàn
-          ...(option == 2 && {
-            groupId: selectedGroupId,
-            spaceId: selectedSpaceId,
-          }),
-        },
-        token
-      )
-      .then((res) => {
-        console.log(res);
-        setoderSuccess(res);
-        setIsSuccess(true);
-      })
-      .catch((err) => {
+    const params = new URLSearchParams(window.location.search);
+    const table = params.get("table");
+    const thisSpace = allSpaces.filter((space) => space.id == table)[0];
+    console.log(user, thisSpace);
+    if (thisSpace.is_inuse == true)
+      if (thisSpace.user_use == user.app.user.profile.user) {
+        api
+          .post(
+            `/oder-fast/`,
+            {
+              takeaway: option == 1,
+              coupon: null,
+              notes: notes,
+              items: orderDetails,
+              restaurant: restData.id,
+              option, // 1: Mang về, 2: Chọn bàn
+              ...(option == 2 && {
+                groupId: selectedGroupId,
+                spaceId: selectedSpaceId,
+              }),
+            },
+            token
+          )
+          .then((res) => {
+            console.log(res);
+            setoderSuccess(res);
+            setIsSuccess(true);
+          })
+          .catch((err) => {
+            setshowPopup(true);
+            setPopUpview(
+              <div className="bg-full center" style={{ zIndex: 120 }}>
+                <div
+                  className="detectOut"
+                  onClick={() => {
+                    setshowPopup(false);
+                  }}
+                ></div>
+                <div className="whiteBox">
+                  <div className="icon red">
+                    <i className="fa-solid fa-circle-xmark"></i>
+                  </div>
+                  <div className="message">
+                    {err?.response?.data?.Error ?? "Lỗi kết nối mạng"}
+                  </div>
+                </div>
+              </div>
+            );
+            console.log(err);
+          })
+          .finally(() => {});
+      } else {
         setshowPopup(true);
         setPopUpview(
           <div className="bg-full center" style={{ zIndex: 120 }}>
@@ -114,18 +143,81 @@ const Restaurant_cart = ({
               }}
             ></div>
             <div className="whiteBox">
-              <div className="icon red">
-                <i className="fa-solid fa-circle-check"></i>
-              </div>
               <div className="message">
-                {err?.response?.data?.Error ?? "Lỗi kết nối mạng"}
+                <div className="flex">Bàn đang được người khác sử dụng</div>
+                <div className="flex">1. Gửi menu cho chủ bàn order</div>
+                <div className="flex">2. Gọi chủ quán</div>
+              </div>
+              <div className="flex tools">
+                <button
+                  onClick={() => {
+                    setshowPopup(false);
+                  }}
+                >
+                  Gọi chủ quán
+                </button>
+                <button
+                  onClick={() => {
+                    api
+                      .post(
+                        `/oder-fast/`,
+                        {
+                          takeaway: option == 1,
+                          coupon: null,
+                          notes: notes,
+                          items: orderDetails,
+                          restaurant: restData.id,
+                          join: thisSpace.user_use,
+                          option, // 1: Mang về, 2: Chọn bàn
+                          ...(option == 2 && {
+                            groupId: selectedGroupId,
+                            spaceId: selectedSpaceId,
+                          }),
+                        },
+                        token
+                      )
+                      .then((res) => {
+                        console.log(res);
+                        setoderSuccess(res);
+                        setIsSuccess(true);
+                        setshowPopup(false);
+                      })
+                      .catch((err) => {
+                        setshowPopup(true);
+                        setPopUpview(
+                          <div
+                            className="bg-full center"
+                            style={{ zIndex: 120 }}
+                          >
+                            <div
+                              className="detectOut"
+                              onClick={() => {
+                                setshowPopup(false);
+                              }}
+                            ></div>
+                            <div className="whiteBox">
+                              <div className="icon red">
+                                <i className="fa-solid fa-circle-xmark"></i>
+                              </div>
+                              <div className="message">
+                                {err?.response?.data?.Error ??
+                                  "Lỗi kết nối mạng"}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                        console.log(err);
+                      })
+                      .finally(() => {});
+                  }}
+                >
+                  Gửi
+                </button>
               </div>
             </div>
           </div>
         );
-        console.log(err);
-      })
-      .finally(() => {});
+      }
   };
   const closeFast = () => {
     popupRef.current.closePopup();

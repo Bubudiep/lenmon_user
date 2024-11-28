@@ -3,7 +3,7 @@ import BottomPopup from "./bottomPopup";
 import api from "../components/api";
 import Cookies from "js-cookie";
 
-const Login_popup = ({ onClose, setUser, settoken }) => {
+const Login_popup = ({ onClose, setUser, settoken, isSuccess }) => {
   const popupRef = useRef(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormdata] = useState({
@@ -34,6 +34,7 @@ const Login_popup = ({ onClose, setUser, settoken }) => {
           expires: expires_in / 86400,
         });
         console.log("Đăng nhập thành công!");
+        isSuccess(true);
       })
       .catch((err) => {
         if (Object.keys(err?.response?.data).includes("username")) {
