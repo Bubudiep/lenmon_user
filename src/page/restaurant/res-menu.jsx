@@ -62,12 +62,8 @@ const Restaurant_menu = ({
                 <div
                   className="image"
                   onClick={() => {
-                    if (token) {
-                      setSelectedItemId(item.id);
-                      setRemoveItemId(null);
-                    } else {
-                      setShowLogin(true);
-                    }
+                    setSelectedItemId(item.id);
+                    setRemoveItemId(null);
                   }}
                 >
                   <img src={item?.image64_mini ?? "#"} alt={item?.name} />
@@ -75,12 +71,8 @@ const Restaurant_menu = ({
                 <div
                   className="info"
                   onClick={() => {
-                    if (token) {
-                      setSelectedItemId(item.id);
-                      setRemoveItemId(null);
-                    } else {
-                      setShowLogin(true);
-                    }
+                    setSelectedItemId(item.id);
+                    setRemoveItemId(null);
                   }}
                 >
                   <div className="item-top">

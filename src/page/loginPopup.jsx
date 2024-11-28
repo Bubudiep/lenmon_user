@@ -21,18 +21,18 @@ const Login_popup = ({ onClose, setUser, settoken }) => {
         email: formData.phone + "@guest.com",
         username: formData.phone,
         password: formData.phone,
-        zalo_name: formData.name,
+        zalo_name: formData.phone,
         zalo_phone: formData.phone,
       })
       .then((res) => {
         const { access_token, refresh_token, expires_in, token_type } = res;
+        setUser((old) => ({ ...old, app: res }));
         settoken(access_token);
-        Cookies.set("lenmon_user", formData.name);
+        Cookies.set("lenmon_user", formData.phone);
         Cookies.set("lenmon_phone", formData.phone);
         Cookies.set("accessToken", access_token, {
           expires: expires_in / 86400,
         });
-        setUser((old) => ({ ...old, app: res }));
         console.log("Đăng nhập thành công!");
       })
       .catch((err) => {
@@ -48,25 +48,11 @@ const Login_popup = ({ onClose, setUser, settoken }) => {
     <BottomPopup ref={popupRef} title="ĐĂNG NHẬP" onClose={onClose}>
       <div className="login-box">
         <div className="login-message">
-          Để nâng cao trải nghiệm và bảo mật người dùng, chúng tôi cần một vài
-          thông tin.
+          Xin chào, bạn chưa đăng nhập. Để nâng cao trải nghiệm và bảo mật người
+          dùng, chúng tôi cần một vài thông tin.
         </div>
         <div className="login-items">
           <div className="items">
-            <div className="index">1</div>
-            <div className="value">
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => {
-                  setFormdata((old) => ({ ...old, name: e.target.value }));
-                }}
-                placeholder="Tên tài khoản..."
-              />
-            </div>
-          </div>
-          <div className="items">
-            <div className="index">2</div>
             <div className="value">
               <input
                 type="text"

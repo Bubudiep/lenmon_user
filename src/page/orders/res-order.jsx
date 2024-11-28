@@ -281,11 +281,7 @@ const Restaurant_order = () => {
             <Restaurant_pupup
               itemQTY={itemQTY}
               showCart={() => {
-                if (token) {
-                  setShowCart(true);
-                } else {
-                  setShowLogin(true);
-                }
+                setShowCart(true);
               }}
             />
             {thanhtoan && (
@@ -304,6 +300,7 @@ const Restaurant_order = () => {
                 itemQTY={itemQTY}
                 restData={restData}
                 token={token}
+                setShowLogin={setShowLogin}
                 setoderSuccess={setoderSuccess}
                 setshowPopup={setshowPopup}
                 setPopUpview={setPopUpview}

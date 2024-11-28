@@ -11,6 +11,7 @@ const Restaurant_cart = ({
   setshowPopup,
   setPopUpview,
   removeItem,
+  setShowLogin,
 }) => {
   const listRef = useRef();
   const popupRef = useRef();
@@ -318,7 +319,16 @@ const Restaurant_cart = ({
                 </div>
               </div>
               <div className="tools">
-                <div className="shop-it" onClick={handleOrderSubmit}>
+                <div
+                  className="shop-it"
+                  onClick={() => {
+                    if (token) {
+                      handleOrderSubmit();
+                    } else {
+                      setShowLogin(true);
+                    }
+                  }}
+                >
                   <i className="fa-solid fa-cart-plus"></i>
                   Đặt hàng
                 </div>
